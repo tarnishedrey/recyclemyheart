@@ -9,7 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class ListHeroAdapter(val listHero: ArrayList<Hero>) : RecyclerView.Adapter<ListHeroAdapter.ListViewHolder>() {
+class ListHeroAdapter(private val listHero: ArrayList<Hero>) : RecyclerView.Adapter<ListHeroAdapter.ListViewHolder>() {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ListViewHolder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_row_hero, viewGroup, false)
@@ -19,12 +25,12 @@ class ListHeroAdapter(val listHero: ArrayList<Hero>) : RecyclerView.Adapter<List
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val (name, from, photo) = listHero[position]
 
-
         Glide.with(holder.itemView.context)
             .load(photo)
             .apply(RequestOptions().override(55, 55))
             .into(holder.imgPhoto)
 
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listHero[position]) }
 
         holder.tvName.text = name
         holder.tvFrom.text = from
@@ -39,6 +45,8 @@ class ListHeroAdapter(val listHero: ArrayList<Hero>) : RecyclerView.Adapter<List
         var tvFrom: TextView = itemView.findViewById(R.id.tv_item_from)
         var imgPhoto: ImageView = itemView.findViewById(R.id.img_item_photo)
     }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: Hero)
+    }
 }
-
-

@@ -21,24 +21,25 @@ class CardViewHeroAdapter(private val listHeroes: ArrayList<Hero>) : RecyclerVie
     override fun onBindViewHolder(holder: CardViewViewHolder, position: Int) {
         val (name, from, photo) = listHeroes[position]
 
-
         Glide.with(holder.itemView.context)
             .load(photo)
             .apply(RequestOptions().override(350, 550))
             .into(holder.imgPhoto)
 
-
         holder.tvName.text = name
         holder.tvFrom.text = from
 
+        holder.btnFavorite.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "Favorite $name", Toast.LENGTH_SHORT).show()
+        }
 
-        holder.btnFavorite.setOnClickListener { Toast.makeText(holder.itemView.context, "Favorite " + listHeroes[holder.adapterPosition].name, Toast.LENGTH_SHORT).show() }
+        holder.btnShare.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "Share $name", Toast.LENGTH_SHORT).show()
+        }
 
-
-        holder.btnShare.setOnClickListener { Toast.makeText(holder.itemView.context, "Share " + listHeroes[holder.adapterPosition].name, Toast.LENGTH_SHORT).show() }
-
-
-        holder.itemView.setOnClickListener { Toast.makeText(holder.itemView.context, "Kamu memilih " + listHeroes[holder.adapterPosition].name, Toast.LENGTH_SHORT).show() }
+        holder.itemView.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "Kamu memilih $name", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -53,4 +54,3 @@ class CardViewHeroAdapter(private val listHeroes: ArrayList<Hero>) : RecyclerVie
         var btnShare: Button = itemView.findViewById(R.id.btn_set_share)
     }
 }
-

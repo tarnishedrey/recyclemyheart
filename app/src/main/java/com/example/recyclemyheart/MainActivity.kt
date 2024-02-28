@@ -1,16 +1,15 @@
 package com.example.recyclemyheart
 
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclemyheart.HeroesData.listData
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rvHeroes: RecyclerView
@@ -34,21 +33,39 @@ class MainActivity : AppCompatActivity() {
         rvHeroes.layoutManager = LinearLayoutManager(this)
         val listHeroAdapter = ListHeroAdapter(list)
         rvHeroes.adapter = listHeroAdapter
+
+        listHeroAdapter.setOnItemClickCallback(object : ListHeroAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: Hero) {
+                showSelectedHero(data)
+            }
+        })
+
+    }
+
+    private fun showSelectedHero(hero: Hero) {
+        Toast.makeText(this, "Kamu memilih " + hero.name, Toast.LENGTH_SHORT).show()
     }
 
     private fun showRecyclerCardView() {
         rvHeroes.layoutManager = LinearLayoutManager(this)
         val cardViewHeroAdapter = CardViewHeroAdapter(list)
         rvHeroes.adapter = cardViewHeroAdapter
+
+
     }
 
     private fun showRecyclerGrid() {
         rvHeroes.layoutManager = GridLayoutManager(this, 2)
         val gridHeroAdapter = GridHeroAdapter(list)
         rvHeroes.adapter = gridHeroAdapter
+
+        gridHeroAdapter.setOnItemClickCallback(object : GridHeroAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: Hero) {
+                showSelectedHero(data)
+            }
+        })
+
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -60,14 +77,9 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     private fun setActionBarTitle(title: String) {
-        if (supportActionBar != null) {
-            (supportActionBar as ActionBar).title = title
-        }
+        supportActionBar?.title = title
     }
-
-
 
     private fun setMode(selectedMode: Int) {
         when (selectedMode) {
@@ -88,15 +100,4 @@ class MainActivity : AppCompatActivity() {
         }
         setActionBarTitle(title)
     }
-
-
-
 }
-
-
-
-
-
-
-
-
